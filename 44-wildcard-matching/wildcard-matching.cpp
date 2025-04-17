@@ -37,36 +37,80 @@ public:
         
         // return solve(n,m,p,s,dp);
 
-        vector<vector<int>> dp(n+1, vector<int>(m+1,0));
+        // vector<vector<int>> dp(n+1, vector<int>(m+1,0));
+
+        // //base case
+        // for(int i=0;i<=n;i++){
+        //     int k=i;
+        //     dp[i][0]=true;
+        //     while(k--){
+        //         if(p[k]!='*'){ 
+        //             dp[i][0]=false;
+        //             break;
+        //         }
+        //     }
+        // }
+
+        // for(int j=1;j<=m;j++){
+        //     dp[0][j]=false;
+        // }
+
+        // for(int i=1;i<=n;i++){
+        //     for(int j=1;j<=m;j++){
+        //         if(p[i-1]==s[j-1]||p[i-1]=='?'){
+        //             dp[i][j]=dp[i-1][j-1];
+        //         }else if(p[i-1]=='*'){
+        //             dp[i][j]=dp[i-1][j]||dp[i][j-1];
+        //         }else{
+        //             dp[i][j]=false;
+        //         }
+        //     }
+        // }
+
+        // return dp[n][m];
+
+        vector<int> prev(m+1,0), curr(m+1,0);
 
         //base case
-        for(int i=0;i<=n;i++){
-            int k=i;
-            dp[i][0]=true;
-            while(k--){
-                if(p[k]!='*'){ 
-                    dp[i][0]=false;
-                    break;
-                }
-            }
-        }
+        // for(int i=0;i<=n;i++){
+        //     int k=i;
+        //     dp[i][0]=true;
+        //     while(k--){
+        //         if(p[k]!='*'){ 
+        //             dp[i][0]=false;
+        //             break;
+        //         }
+        //     }
+        // }
+
+        prev[0]=true;
 
         for(int j=1;j<=m;j++){
-            dp[0][j]=false;
+            prev[j]=false;
         }
 
         for(int i=1;i<=n;i++){
-            for(int j=1;j<=m;j++){
-                if(p[i-1]==s[j-1]||p[i-1]=='?'){
-                    dp[i][j]=dp[i-1][j-1];
-                }else if(p[i-1]=='*'){
-                    dp[i][j]=dp[i-1][j]||dp[i][j-1];
-                }else{
-                    dp[i][j]=false;
+            curr[0] = true;
+            for(int k = 0; k < i; k++) {
+                if(p[k] != '*') {
+                    curr[0] = false;
+                    break;
                 }
             }
+
+            for(int j=1;j<=m;j++){
+                if(p[i-1]==s[j-1]||p[i-1]=='?'){
+                    curr[j]=prev[j-1];
+                }else if(p[i-1]=='*'){
+                    curr[j]=prev[j]||curr[j-1];
+                }else{
+                    curr[j]=false;
+                }
+            }
+
+            prev=curr;
         }
 
-        return dp[n][m];
+        return prev[m];
     }
 };
